@@ -17,7 +17,7 @@ struct {
   size_t seed = 0;
   std::vector<unsigned> nb_samples{1000000, 10000, 10000, 10000};
   string dump_to = "ehs.dat";
-  unsigned nb_threads = 6;
+  unsigned nb_threads = 14;
 } options;
 
 hand_indexer_t indexer[4];

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-THREADS=2
+THREADS=14
 
 # each comma separated values is a fraction of the pot
 # to raise by. 9999 is allin.
@@ -8,7 +8,7 @@ POTREL="0.4,0.8,1.2,2,5,9999"
 
 TIME=3600 # 1 hour 
 
-./cluster-abs --handranks ../../handranks.dat\
+./cluster-abs --handranks ./handranks.dat\
 	--threads $THREADS\
 	-s abstractions/final-agent-npeo-pre.abs\
 	-m mixed_neeo\
@@ -22,12 +22,12 @@ TIME=3600 # 1 hour
 	-l abstractions/final-agent-npeo-pre.abs\
 	-s abstractions/final-agent-npeo.abs\
 	--threads $THREADS -b 100\
-	--handranks ../../handranks.dat\
+	--handranks ./handranks.dat\
 	--seed 0
 
 ./cfrm --seed 0 -t holdem \
-	--handranks ../../handranks.dat\
-	-g ../../games/holdem.nolimit.2p.reverse_blinds.game\
+	--handranks ./handranks.dat\
+	-g ./games/holdem.nolimit.2p.reverse_blinds.game\
 	-c cluster -a potrel\
 	-n $POTREL -r $TIME -k 10000 --threads $THREADS\
 	-m abstractions/final-agent-npeo.abs\

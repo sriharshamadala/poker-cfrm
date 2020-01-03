@@ -27,7 +27,7 @@ protected:
 public:
   std::vector<uint64_t> public_tree_cache;
   AbstractGame(const Game *game_definition, CardAbstraction *card_abs,
-               ActionAbstraction *action_abs, int nb_threads = 1);
+               ActionAbstraction *action_abs, int nb_threads = 14);
 
   virtual ~AbstractGame();
   virtual void evaluate(hand_t &hand) = 0;
@@ -142,7 +142,7 @@ class KuhnGame : public AbstractGame {
 
 public:
   KuhnGame(const Game *game_definition, CardAbstraction *cabs,
-           ActionAbstraction *aabs, int nb_threads = 1);
+           ActionAbstraction *aabs, int nb_threads = 14);
 
   virtual void evaluate(hand_t &hand);
 };
@@ -150,7 +150,7 @@ public:
 class LeducGame : public AbstractGame {
 public:
   LeducGame(const Game *game_definition, CardAbstraction *cabs,
-            ActionAbstraction *aabs, int nb_threads = 1);
+            ActionAbstraction *aabs, int nb_threads = 14);
 
   virtual void evaluate(hand_t &hand);
   int rank_hand(int hand, int board);
@@ -161,7 +161,7 @@ class HoldemGame : public AbstractGame {
 
 public:
   HoldemGame(const Game *game_definition, CardAbstraction *cabs,
-             ActionAbstraction *aabs, ecalc::Handranks *hr, int nb_threads = 1);
+             ActionAbstraction *aabs, ecalc::Handranks *hr, int nb_threads = 14);
 
   virtual void evaluate(hand_t &hand);
 };

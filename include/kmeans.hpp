@@ -105,7 +105,7 @@ static void kmeans_center_multiple_restarts(
 static void kmeans(cluster_t nb_clusters, dataset_t &dataset,
                    precision_t (*distFunc)(histogram_t &, histogram_t &,
                                            unsigned, void *),
-                   histogram_c &center, unsigned nb_threads = 1,
+                   histogram_c &center, unsigned nb_threads = 14,
                    precision_t epsilon = 0.01, void *context = NULL) {
   size_t nb_data, nb_features, accumulator, per_block, changed, iter;
 

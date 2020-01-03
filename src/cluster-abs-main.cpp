@@ -39,8 +39,8 @@ const char *metric_str[] = {
 
 struct {
   string handranks_path = "/usr/local/freedom/data/handranks.dat";
-  string ehs_path = "../../EHS.dat";
-  int nb_threads = 1;
+  string ehs_path = "./ehs.dat";
+  int nb_threads = 14;
   size_t seed = time(NULL);
   string save_to = "";
 

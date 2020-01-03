@@ -17,7 +17,7 @@ struct {
   string load_from = "";
   string save_to = "";
   string handranks_path = "/usr/local/freedom/data/handranks.dat";
-  int nb_threads = 1;
+  int nb_threads = 14;
   size_t seed = time(NULL);
 
   double cluster_target_precision = 0.01;

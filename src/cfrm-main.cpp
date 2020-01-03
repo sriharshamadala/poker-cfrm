@@ -27,14 +27,14 @@ namespace po = boost::program_options;
 struct {
   game_t type = leduc;
   string handranks_path = "/usr/local/freedom/data/handranks.dat";
-  string game_definition = "../../games/leduc.limit.2p.game";
+  string game_definition = "./games/leduc.limit.2p.game";
 
   card_abstraction card_abs = NULLCARD_ABS;
   action_abstraction action_abs = NULLACTION_ABS;
   string card_abs_param = "";
   string action_abs_param = "";
 
-  int nb_threads = 6;
+  int nb_threads = 14;
   size_t seed = time(NULL);
 
   double runtime = 50;

@@ -51,7 +51,7 @@ public:
   EHSAbstractionGenerator(std::ofstream &dump_to, int_c buckets_per_round,
                           int_c samples_per_round, dbl_c err_bounds,
                           EHSLookup *ehslp, boost::mt19937 &rng,
-                          int nb_threads = 1)
+                          int nb_threads = 14)
       : AbstractionGenerator(dump_to), nb_buckets(buckets_per_round),
         err_bounds(err_bounds), clusterrng(rng), nb_samples(samples_per_round),
         ehslp(ehslp), nb_threads(nb_threads) {
@@ -146,7 +146,7 @@ public:
                           int_c samples_per_round, int_c num_history_points,
                           int_c nb_hist_samples_per_round, dbl_c err_bounds,
                           EHSLookup* ehslp, boost::mt19937 &rng,
-                          int nb_threads = 1)
+                          int nb_threads = 14)
       : AbstractionGenerator(dump_to), nb_buckets(buckets_per_round),
         clusterrng(rng), nb_samples(samples_per_round), ehslp(ehslp), 
         num_history_points(num_history_points),
@@ -429,7 +429,7 @@ public:
   OCHSAbstractionGenerator(std::ofstream &dump_to, int_c buckets_per_round,
                            int_c samples_per_round, int_c num_opponent_clusters,
                            dbl_c err_bounds, ecalc::Handranks *hr,
-                           boost::mt19937 &rng, int nb_threads = 1)
+                           boost::mt19937 &rng, int nb_threads = 14)
       : AbstractionGenerator(dump_to), nb_buckets(buckets_per_round),
         clusterrng(rng), nb_samples(samples_per_round), calc(nb_threads),
         num_opponent_clusters(num_opponent_clusters), err_bounds(err_bounds),

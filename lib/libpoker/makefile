@@ -27,8 +27,10 @@ DEP_FILES = $(OBJ_FILES:.o=.d)
 all: prepare $(LIB_OUT)
 
 prepare:
-	mkdir -p obj/{release,debug}
-	mkdir -p lib/{release,debug}
+	mkdir -p obj/release
+	mkdir -p obj/debug
+	mkdir -p lib/release
+	mkdir -p lib/debug
 
 
 $(LIB_OUT): $(OBJ_FILES)
