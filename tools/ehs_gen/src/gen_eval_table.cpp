@@ -24,6 +24,7 @@ hand_indexer_t indexer[4];
 
 int main(int argc, char **argv) {
 
+  // Initializing each of the 4 indexers with 
   assert(hand_indexer_init(1, (uint8_t[]) {2}, &indexer[0]));
   assert(hand_indexer_init(2, (uint8_t[]) {2, 3}, &indexer[1]));
   assert(hand_indexer_init(2, (uint8_t[]) {2, 4}, &indexer[2]));

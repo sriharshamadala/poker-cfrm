@@ -41,6 +41,10 @@ typedef std::vector<card_c> hand_list;
 
 typedef ecalc::XOrShiftGenerator nbgen;
 
+/**
+ * @brief Contains hole cards, board cards and a vector to hold the result.
+ *
+ */
 struct hand_t {
   // +1 win, 0 tie, -1 lost per player
   typedef std::vector<int8_t> result;

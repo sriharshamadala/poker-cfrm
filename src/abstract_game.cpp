@@ -301,6 +301,12 @@ HoldemGame::HoldemGame(const Game *game_definition, CardAbstraction *cabs,
                        int nb_threads)
     : AbstractGame(game_definition, cabs, aabs, nb_threads), handranks(hr) {}
 
+/**
+ * @brief Evaluates p1 vs p2 based on handranks.dat lookup.
+ *
+ * @param hand [in, out] Contains information about p1, p2's hands and the board.
+ *                       It also stores the result from lookup.
+ */
 void HoldemGame::evaluate(hand_t &hand) {
   using namespace ecalc;
 

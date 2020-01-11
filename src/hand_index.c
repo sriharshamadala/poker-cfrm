@@ -68,60 +68,75 @@ static void __attribute__((constructor)) hand_index_ctor() {
       used                   |= 1<<shifted_suit;
     }
   }
-} 
+}
 
-void enumerate_configurations_r(uint_fast32_t rounds, const uint8_t cards_per_round[], 
-    uint_fast32_t round, uint_fast32_t remaining, 
-    uint_fast32_t suit, uint_fast32_t equal, uint_fast32_t used[], uint_fast32_t configuration[],
-    void (*observe)(uint_fast32_t, uint_fast32_t[], void*), void * data) {
+void enumerate_configurations_r(
+    uint_fast32_t rounds, const uint8_t cards_per_round[], uint_fast32_t round,
+    uint_fast32_t remaining, uint_fast32_t suit, uint_fast32_t equal,
+    uint_fast32_t used[], uint_fast32_t configuration[],
+    void (*observe)(uint_fast32_t, uint_fast32_t[], void*), void* data) {
   if (suit == SUITS) {
     observe(round, configuration, data);
 
-    if (round+1 < rounds) {
-      enumerate_configurations_r(rounds, cards_per_round, round+1, cards_per_round[round+1], 0, equal, used, configuration, observe, data);
+    if (round + 1 < rounds) {
+      enumerate_configurations_r(rounds, cards_per_round, round + 1,
+                                 cards_per_round[round + 1], 0, equal, used,
+                                 configuration, observe, data);
     }
   } else {
     uint_fast32_t min = 0;
-    if (suit == SUITS-1) {
+    if (suit == SUITS - 1) {
       min = remaining;
     }
-    
-    uint_fast32_t max = RANKS-used[suit];
+
+    uint_fast32_t max = RANKS - used[suit];
     if (remaining < max) {
       max = remaining;
     }
-   
-    uint_fast32_t previous = RANKS+1;
-    bool was_equal = equal&1<<suit;
+
+    uint_fast32_t previous = RANKS + 1;
+    bool was_equal = equal & 1 << suit;
     if (was_equal) {
-      previous = configuration[suit-1]>>ROUND_SHIFT*(rounds-round-1)&ROUND_MASK;
+      previous = configuration[suit - 1] >> ROUND_SHIFT * (rounds - round - 1) &
+                 ROUND_MASK;
       if (previous < max) {
         max = previous;
       }
     }
-    
-    uint_fast32_t old_configuration = configuration[suit], old_used = used[suit];
-    for(uint_fast32_t i=min; i<=max; ++i) {
-      uint_fast32_t new_configuration = old_configuration | i<<ROUND_SHIFT*(rounds-round-1);
-      uint_fast32_t new_equal = (equal&~(1<<suit))|(was_equal&(i==previous))<<suit;
 
-      used[suit] = old_used+i;
+    uint_fast32_t old_configuration = configuration[suit],
+                  old_used = used[suit];
+    for (uint_fast32_t i = min; i <= max; ++i) {
+      uint_fast32_t new_configuration =
+          old_configuration | i << ROUND_SHIFT * (rounds - round - 1);
+      uint_fast32_t new_equal =
+          (equal & ~(1 << suit)) | (was_equal & (i == previous)) << suit;
+
+      used[suit] = old_used + i;
       configuration[suit] = new_configuration;
-      enumerate_configurations_r(rounds, cards_per_round, round, remaining-i, suit+1, new_equal, used, configuration, observe, data);
+      enumerate_configurations_r(rounds, cards_per_round, round, remaining - i,
+                                 suit + 1, new_equal, used, configuration,
+                                 observe, data);
       configuration[suit] = old_configuration;
       used[suit] = old_used;
     }
   }
 }
 
-void enumerate_configurations(uint_fast32_t rounds, const uint8_t cards_per_round[],
-    void (*observe)(uint_fast32_t, uint_fast32_t[], void*), void * data) {
+void enumerate_configurations(
+    uint_fast32_t rounds, const uint8_t cards_per_round[],
+    void (*observe)(uint_fast32_t, uint_fast32_t[], void*), void* data) {
   uint_fast32_t used[SUITS] = {0}, configuration[SUITS] = {0};
-  enumerate_configurations_r(rounds, cards_per_round, 0, cards_per_round[0], 0, (1<<SUITS) - 2, used, configuration, observe, data);
+  enumerate_configurations_r(rounds, cards_per_round, 0, cards_per_round[0], 0,
+                             (1 << SUITS) - 2, used, configuration, observe,
+                             data);
 }
 
-void count_configurations(uint_fast32_t round, uint_fast32_t configuration[], void * data) {
-  uint_fast32_t * counts = data; ++counts[round];
+// TODO Why is configuration[] param not used? Why not typecast instead of an extra variable?
+void count_configurations(uint_fast32_t round, uint_fast32_t configuration[],
+                          void* data) {
+  uint_fast32_t* counts = data;
+  ++counts[round];
 }
 
 void tabulate_configurations(uint_fast32_t round, uint_fast32_t configuration[], void * data) {
@@ -301,14 +316,25 @@ void tabulate_permutations(uint_fast32_t round, uint_fast32_t count[], void * da
   indexer->permutation_to_configuration[round][idx] = low;
 }
 
-bool hand_indexer_init(uint_fast32_t rounds, const uint8_t cards_per_round[], hand_indexer_t * indexer) {
+/**
+ * @brief Initializes a hand_indexer_t struct
+ *
+ * @param[in] rounds - number of rounds indexed?
+ * @param[in] cards_per_round - array of size rounds, containing number of cards in each round. Flop, turn and river rounds have 3,4 and 5 cards, respectively. 
+ * @param[out] indexer - pointer to hand_indexer_t that is being initialized.                           
+ *
+ */
+bool hand_indexer_init(uint_fast32_t rounds, const uint8_t cards_per_round[],
+                       hand_indexer_t* indexer) {
   if (rounds == 0) {
     return false;
   }
+
   if (rounds > MAX_ROUNDS) {
     return false;
   }
-  for(uint_fast32_t i=0, count=0; i<rounds; ++i) {
+
+  for (uint_fast32_t i = 0, count = 0; i < rounds; ++i) {
     count += cards_per_round[i];
     if (count > CARDS) {
       return false;
@@ -316,15 +342,16 @@ bool hand_indexer_init(uint_fast32_t rounds, const uint8_t cards_per_round[], ha
   }
 
   memset(indexer, 0, sizeof(hand_indexer_t));
-
   indexer->rounds = rounds;
   memcpy(indexer->cards_per_round, cards_per_round, rounds); 
-  for(uint_fast32_t i=0, j=0; i<rounds; ++i) {
-    indexer->round_start[i] = j; j += cards_per_round[i];
+  for(uint_fast32_t ii=0, jj=0; i<rounds; ++ii) {
+    indexer->round_start[ii] = jj;
+    jj += cards_per_round[ii];
   }
 
   memset(indexer->configurations, 0, sizeof(indexer->configurations));
-  enumerate_configurations(rounds, cards_per_round, count_configurations, indexer->configurations);
+  enumerate_configurations(rounds, cards_per_round, count_configurations,
+                           indexer->configurations);
 
   for(uint_fast32_t i=0; i<rounds; ++i) {
     indexer->configuration_to_equal[i]     = calloc(indexer->configurations[i], sizeof(uint_fast32_t));
